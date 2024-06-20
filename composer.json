@@ -9,6 +9,10 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/dbal": "^3",
+        "doctrine/doctrine-bundle": "^2.12",
+        "doctrine/doctrine-migrations-bundle": "^3.3",
+        "doctrine/orm": "^3.2",
         "symfony/console": "7.1.*",
         "symfony/dotenv": "7.1.*",
         "symfony/flex": "^2",
@@ -17,6 +21,7 @@
         "symfony/yaml": "7.1.*"
     },
     "require-dev": {
+        "symfony/maker-bundle": "^1.60"
     },
     "config": {
         "allow-plugins": {
@@ -64,7 +69,8 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.1.*"
+            "require": "7.1.*",
+            "docker": false
         }
     }
 }
