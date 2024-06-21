@@ -24,8 +24,7 @@ class Profile
     #[ORM\ManyToMany(targetEntity: Role::class)]
     private Collection $roles;
 
-    #[ORM\ManyToOne(inversedBy: 'profile')]
-    private ?User $usser = null;
+    
 
     public function __construct()
     {
@@ -72,16 +71,5 @@ class Profile
 
         return $this;
     }
-
-    public function getUsser(): ?User
-    {
-        return $this->usser;
-    }
-
-    public function setUsser(?User $usser): static
-    {
-        $this->usser = $usser;
-
-        return $this;
-    }
+    
 }

@@ -7,10 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -35,11 +37,13 @@ class User
     /**
      * @var Collection<int, Profile>
      */
-    #[ORM\OneToMany(targetEntity: Profile::class, mappedBy: 'usser')]
-    private Collection $profile;
+
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $image = null;
+
+    #[ORM\ManyToOne]
+    private ?Profile $profile = null;
 
     public function __construct()
     {
@@ -111,35 +115,9 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection<int, Profile>
-     */
-    public function getProfile(): Collection
-    {
-        return $this->profile;
-    }
 
-    public function addProfile(Profile $profile): static
-    {
-        if (!$this->profile->contains($profile)) {
-            $this->profile->add($profile);
-            $profile->setUsser($this);
-        }
 
-        return $this;
-    }
 
-    public function removeProfile(Profile $profile): static
-    {
-        if ($this->profile->removeElement($profile)) {
-            // set the owning side to null (unless already changed)
-            if ($profile->getUsser() === $this) {
-                $profile->setUsser(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getImage(): ?string
     {
@@ -151,5 +129,39 @@ class User
         $this->image = $image;
 
         return $this;
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(?Profile $profile): static
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials(): void
+    {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles(): array
+    {
+        return ["nada"];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUserIdentifier(): string
+    {
+        return "".$this->getId();
     }
 }
