@@ -1,25 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-   
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
+{% extends 'base.html.twig' %}
 
-<body onload="getUsers()">
+{% block title %}Utilisateurs{% endblock %}
+
+
+{% block onload %} onload="getUsers()" {% endblock %}
+
+{% block body %}
+
+
     <div class="container">
         <div class="text-center">
-            <h1>Users</h1>
+            <h1>Utilisateurs</h1>
         </div>
-        <a href="/profiles/index" class="btn btn-warning">Manage Profiles</a><br>
-        <a href="add">New User</a>
+        
+
+        <input type="text" id="searchId" class="form-control search-box" placeholder="Rechercher par id"><br> ou <br>  <input type="text" id="searchOther" class="form-control search-box" placeholder="par les autres "> <br>
+        <div class="d-flex justify-content-between">
+    <a href="/profiles/index" class="btn btn-success">Gérer les profils</a>
+    <a href="add" class="btn btn-primary"> <span class="material-symbols-outlined">
+add
+</span>Nouvel utilisateur</a>
+</div> <br>
         <table class="table table-striped table-bordered">
             <tr>
                 <th>ID</th>
-                <th>Username</th>
+                <th>Nom d'utilisateur</th>
                 <th>Email</th>
                 <th>Address</th>
                 <th>Telephone</th>
@@ -34,11 +40,12 @@
 
 
         <!-- Modal -->
+        
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit user :</h5>
+                        <h5 class="modal-title" id="editModalLabel">Modifier utilisateur</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close">&times;</button>
                     </div>
@@ -49,7 +56,7 @@
 
                             <!-- Username input -->
                             <div class="mb-3">
-                                <label for="username" class="form-label">Username : </label>
+                                <label for="username" class="form-label">Nom d'utilisateur  : </label>
                                 <input type="text" class="form-control" id="username">
                             </div>
 
@@ -67,15 +74,15 @@
 
                             <!-- Phone input -->
                             <div class="mb-3">
-                                <label for="phone" class="form-label">Phone</label>
+                                <label for="phone" class="form-label">Telephone</label>
                                 <input type="text" class="form-control" id="phone">
                             </div>
 
 
                             <div class="mb-3">
-                                <label for="password" class="form-label">New Password: </label>
+                                <label for="password" class="form-label">Nouveau mot de passe: </label>
                                 <input type="password" class="form-control" id="password" placeholder="">
-                                (Don't change it if you don't wan't to change it)
+                                (Ne pas toucher si vous ne voulez pas changer)
                             </div>
 
                             <div class="mb-3">
@@ -87,8 +94,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Dismiss</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="edit()">Moodify</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="edit()">Modifier</button>
                     </div>
                 </div>
             </div>
@@ -98,7 +105,28 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/script.js') }}"></script>
-</body>
+{% endblock %}
 
 
-</html>
+{% block jss %}
+    <script>
+         $(document).ready(function() {
+             $("#searchId").on("keyup", function() {
+                 var value = $(this).val().toLowerCase();
+                 $("#usersTable tr").filter(function() {
+                     $(this).toggle($(this).find("td:first").text().toLowerCase().indexOf(value) > -1)
+                 });
+             });
+         });
+
+         $(document).ready(function() {
+            $("#searchOther").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#usersTable tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+     </script>
+{% endblock %}

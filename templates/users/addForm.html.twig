@@ -2,7 +2,7 @@
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Add profile{% endblock %}
+{% block title %}Nv user{% endblock %}
 
 
 {% block onload %} onload="getAllProfilesInSelect()" {% endblock %}
@@ -11,7 +11,7 @@
 <div class="container mt-5">
     <a href="http://localhost:8000/users/index" class="btn btn-primary"><span class="material-symbols-outlined">
         arrow_circle_left
-        </span>Get back to users</a>
+        </span>Revenir aux utilisatuers</a>
     <h1>Add a new User</h1>
     <div id="addUserForm">
         <div class="form-group">
@@ -19,7 +19,7 @@
             <input type="text" class="form-control" id="username" required>
         </div>
         <div class="form-group">
-            <label for="password">Password :</label>
+            <label for="password">Mot de passe :</label>
             <input type="password" class="form-control" id="password" required>
         </div>
         <div class="form-group">
@@ -31,15 +31,15 @@
             <input type="text" class="form-control" id="address" required>
         </div>
         <div class="form-group">
-            <label for="phone">Phone :</label>
+            <label for="phone">Téléphone :</label>
             <input type="tel" class="form-control" id="phone" required>
         </div>
 
         <div>
-            <label for="profileSelect">Profile : </label>
+            <label for="profileSelect">Profil : </label>
             <select id="profileSelect"></select>
         </div>
-        <button type="button" class="btn btn-success" onclick="addUser()">Add user</button>
+        <button type="button" class="btn btn-success" onclick="addUser()">Ajouter l'utilisateur</button>
     </div>
 </div>
 {% endblock %}
