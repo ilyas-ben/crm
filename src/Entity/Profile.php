@@ -21,10 +21,10 @@ class Profile
     /**
      * @var Collection<int, Role>
      */
-    #[ORM\ManyToMany(targetEntity: Role::class)]
+    #[ORM\ManyToMany(targetEntity: Role::class, cascade: ["all"])]
     private Collection $roles;
 
-    
+
 
     public function __construct()
     {
@@ -71,5 +71,23 @@ class Profile
 
         return $this;
     }
-    
+
+    public function setRoles(Collection $roles): static
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        $rolesArray = $this->roles->toArray();
+
+        return sprintf(
+            "Profile Name: %s, Roles: %s",
+            $this->name ?? '',
+            json_encode($rolesArray, JSON_PRETTY_PRINT)
+        );
+    }
+
+
 }

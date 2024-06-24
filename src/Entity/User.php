@@ -39,20 +39,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
 
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $image = null;
-
+ 
     #[ORM\ManyToOne]
     private ?Profile $profile = null;
 
-    public function __construct()
-    {
-        $this->profile = new ArrayCollection();
-    }
+    
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int  $id): static
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getUsername(): ?string
@@ -115,22 +116,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-
-
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
     public function getProfile(): ?Profile
     {
         return $this->profile;
@@ -154,7 +139,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        return ["nada"];
+        return ["dont pay attention to this field, please"];
     }
 
     /**
@@ -163,5 +148,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return "".$this->getId();
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            'User(id: %d, username: %s, email: %s, address: %s, phone: %d)',
+            $this->getId(),
+            $this->getUsername(),
+            $this->getEmail(),
+            $this->getAddress(),
+            $this->getPhone()
+        );
     }
 }

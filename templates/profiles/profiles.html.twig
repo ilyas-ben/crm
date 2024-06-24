@@ -1,0 +1,100 @@
+{#profiles.html.twig²#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Profiles{% endblock %}
+
+{% block onload %} onload="getProfiles()" {% endblock %}
+
+{% block body %}
+
+
+    <div class="text-center">
+        <h1>Profiles</h1>
+    </div>
+
+
+    <a href="/users/index">Go back to users</a>
+    <div class="d-flex justify-content-end">
+        <a href="{{ path('app_profile_add_form') }}" class="btn btn-primary">Add Profile</a>
+    </div>
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="profilesList">
+            <!-- Les profils seront ajoutés ici dynamiquement -->
+        </tbody>
+    </table>
+
+
+<!-- Modal Bootstrap pour afficher les rôles -->
+<div class="modal fade" id="rolesModal" tabindex="-1" aria-labelledby="rolesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rolesModalLabel">Rôles du Profil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="rolesList">
+                    <!-- Les rôles seront ajoutés ici dynamiquement -->
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="editProfileForm">
+                    <!-- Profile name input -->
+                    <input type="hidden" name="" id="profileId">
+                    <div class="form-group">
+                        <label for="editProfileName">Profile Name:</label>
+                        <input type="text" class="form-control" id="editProfileName" placeholder="Enter profile name">
+                    </div>
+
+                    <!-- Roles checkboxes -->
+                    <div class="form-group">
+                        <label>Roles:</label>
+                        <ul id="editRolesList" class="list-group">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChangesBtn" data-dismiss="modal"
+                    onclick="editProfile()">Save
+                    changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

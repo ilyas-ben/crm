@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +25,14 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
+    }
+
+    public function supports(Request $request): bool
+    {
+
+        
+         return ("/login" != $request->getBaseUrl().$request->getPathInfo() && $request->getSession()->get(SecurityRequestAttributes::LAST_USERNAME) == null) || ($request->isMethod('POST') && $this->getLoginUrl($request) === $request->getBaseUrl().$request->getPathInfo());
+         ;
     }
 
     public function authenticate(Request $request): Passport
@@ -53,14 +62,10 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
         $loggedInUsername = $request->getSession()->get(SecurityRequestAttributes::LAST_USERNAME, "username");
 
-        $response = new Response("Welcom !" . $loggedInUsername);
-
-        // Set the content type header to plain text
-        $response->headers->set('Content-Type', 'text/plain');
-
         // For example:
-        // return new RedirectResponse($this->urlGeneror->generate('some_route'));
-        return $response;
+        $url = $this->urlGenerator->generate('app_home');
+        return new RedirectResponse($url);
+        
     }
 
     protected function getLoginUrl(Request $request): string

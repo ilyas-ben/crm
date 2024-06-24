@@ -22,3 +22,30 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+ # Profile Service
+    App\Service\ProfileService:
+        class: App\Service\ProfileService
+        arguments:
+            $profileRepository: '@App\Repository\ProfileRepository'
+            $roleService: '@App\Service\RoleService'
+            $serializer: '@serializer'  # Assuming you have the serializer service available
+
+        # Optionally, you can specify other settings like public, autowire, autoconfigure
+        public: true  # Make the service accessible outside the container (optional)
+        autowire: true  # Enable automatic dependency injection (optional)
+        autoconfigure: true  # Allow the service to be configured automatically (optional)
+        
+
+    App\Service\UserService:
+        class: App\Service\UserService
+        arguments:
+            $userRepository: '@App\Repository\UserRepository'
+            $serializer: '@serializer'  # Assuming you have the serializer service available
+
+        # Optionally, you can specify other settings like public, autowire, autoconfigure
+        public: true  # Make the service accessible outside the container (optional)
+        autowire: true  # Enable automatic dependency injection (optional)
+        autoconfigure: true  # Allow the service to be configured automatically (optional)
+
+        

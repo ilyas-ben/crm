@@ -21,6 +21,8 @@ security:
                 enable_csrf: true
             logout:
                 path: app_logout
+                invalidate_session: true # This will clear the session
+                
             entry_point: App\Security\AppAuthenticator
             custom_authenticator: App\Security\AppAuthenticator
 

@@ -19,6 +19,10 @@ class Role
     #[ORM\Column(length: 255)]
     private ?string $groupe = null;
 
+    public function __construct(Type $var = null) {
+        $this->var = $var;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
