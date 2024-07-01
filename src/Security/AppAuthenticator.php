@@ -29,15 +29,12 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function supports(Request $request): bool
     {
-
         
-         return ("/login" != $request->getBaseUrl().$request->getPathInfo() && $request->getSession()->get(SecurityRequestAttributes::LAST_USERNAME) == null) || ($request->isMethod('POST') && $this->getLoginUrl($request) === $request->getBaseUrl().$request->getPathInfo());
-         ;
+         return ("/login" != $request->getBaseUrl().$request->getPathInfo() && $request->getSession()->get(SecurityRequestAttributes::LAST_USERNAME) == null) || ($request->isMethod('POST') && $this->getLoginUrl($request) === $request->getBaseUrl().$request->getPathInfo()); /* false */;
     }
 
     public function authenticate(Request $request): Passport
     {
-
 
         $username = $request->getPayload()->getString('username');
 

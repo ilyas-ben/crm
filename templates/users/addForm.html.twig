@@ -10,9 +10,9 @@
 {% block body %}
 <div class="container mt-5">
     <a href="http://localhost:8000/users/index" class="btn btn-primary"><span class="material-symbols-outlined">
-        arrow_circle_left
+            arrow_circle_left
         </span>Revenir aux utilisatuers</a>
-    <h1>Add a new User</h1>
+    <h1 class="text-center">Ajouter un nouvel utilisateur</h1>
     <div id="addUserForm">
         <div class="form-group">
             <label for="username">Nom dutilisateur :</label>
@@ -34,6 +34,11 @@
             <label for="phone">Téléphone :</label>
             <input type="tel" class="form-control" id="phone" required>
         </div>
+        <div class="form-group">
+            <label for="image">Image :</label>
+            <input type="file" name="" class="form-control" id="imageInput">
+            <input type="hidden" name="" id="image">
+        </div>
 
         <div>
             <label for="profileSelect">Profil : </label>
@@ -42,4 +47,33 @@
         <button type="button" class="btn btn-success" onclick="addUser()">Ajouter l'utilisateur</button>
     </div>
 </div>
+{% endblock %}
+
+
+{% block jss %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('imageInput');
+        const base64Output = document.getElementById('image');
+
+        fileInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const base64String = e.target.result;
+                    base64Output.value = base64String;
+                };
+
+                reader.onerror = function (error) {
+                    console.error('Error: ', error);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau tiers{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <a href="/tiers/index" class="btn btn-primary">
+        <span class="material-symbols-outlined">arrow_circle_left</span> Revenir aux tiers
+    </a>
+    <h1 class="text-center">Ajouter un nouveau tiers</h1>
+    <div id="addTiersForm">
+        <div class="form-group">
+            <label for="raisonSociale">Raison Sociale :</label>
+            <input type="text" class="form-control" id="raisonSociale" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Adresse :</label>
+            <input type="text" class="form-control" id="address" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Téléphone :</label>
+            <input type="tel" class="form-control" id="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email :</label>
+            <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="form-group">
+            <label for="typeSelect">Type : </label>
+            <select id="typeSelect"></select>
+        </div>
+        <div class="container mt-5">
+            <div class="text-center">
+                <h2>Info additionnels</h2>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-success" id="addRowBtn">+</button>
+                    <button type="button" class="btn btn-danger" id="removeRowBtn">-</button>
+                </div>
+            </div><br>
+            <div id="dynamicForm">
+                <!-- Rows will be dynamically added here -->
+                
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-primary" onclick="addTiers()">Ajouter</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block jss %}
+
+<script>
+$(document).ready(function() {
+    $('.select').select2();
+});
+</script>
+<script>
+    $(document).ready(async function () {
+
+        getAllTiersTypesInSelect();
+        const additionalInfoFields = await getAdditionalInfoFields();
+
+        // Fetch additional info fields once
+        async function getAdditionalInfoFields() {
+            const response = await fetch('/additional-info-fields');
+            if (!response.ok) {
+                throw new Error('Failed to fetch additional info fields');
+            }
+            const data = await response.json();
+            return data;
+        }
+
+        // Function to add a new row
+        function addRow() {
+            var newRow = `
+                <div class="form-row mb-3 addInfos">
+                    <div class="col">
+                        <select class="form-control selectField">
+                            <!-- Options will be dynamically added -->
+                        </select>
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control inputField" placeholder="Enter value">
+                    </div>
+                </div>
+            `;
+            $('#dynamicForm').append(newRow);
+
+            // Populate options in the select field
+            const options = additionalInfoFields.map(field => `<option value="${field.id}">${field.fieldName}</option>`);
+            $('.selectField:last').html(options.join(''));
+            $('.selectField:last').append('<option value="0" selected>Selectionner un champ</option>');
+            $('.selectField:last').select2();
+        }
+
+        // Add row button click handler
+        $('#addRowBtn').on('click', function () {
+            addRow();
+            addTiers();
+        });
+
+        // Remove row button click handler
+        $('#removeRowBtn').on('click', function () {
+            $('#dynamicForm .form-row:last').remove();
+        });
+
+        // Function to handle adding tiers (if needed)
+        // Function to handle adding tiers
+        function addTiers() {
+            // Example to get values from each row
+            var formData = [];
+            $('#dynamicForm .form-row').each(function () {
+                var selectValue = $(this).find('.selectField').val();
+                var inputValue = $(this).find('.inputField').val();
+                formData.push([selectValue, inputValue]);
+            });
+
+            // Use formData array as needed (e.g., send it via AJAX)
+        }
+
+        
+    });
+</script>
+{% endblock %}

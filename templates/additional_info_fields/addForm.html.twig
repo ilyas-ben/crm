@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau champ d'information supplémentaire{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <a href="/additional-info-fields/index" class="btn btn-primary"><span class="material-symbols-outlined">
+            arrow_circle_left
+        </span> Revenir aux champs d'information supplémentaires</a>
+    <h1 class="text-center">Ajouter un nouveau champ d'information supplémentaire</h1>
+    <div id="addFieldForm">
+        <div class="form-group">
+            <label for="fieldName">Nom du Champ :</label>
+            <input type="text" class="form-control" id="fieldName" required>
+        </div>
+        <div class="form-group">
+            <label for="entityType">Type d'Entité :</label>
+            <input type="text" class="form-control" id="entityType" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-primary" onclick="addAdditionalInfoField()">Ajouter</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block jss %}
+    <script src="{{ asset('js/addInfo.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{%block onload %} onload="getUsers()"{% endblock %}
+
+{% block body %} 
+
+    <div class="text-center">
+        <h1>Utilisateurs</h1>
+    </div>
+
+    <table class="table display" id="example">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom d'utilisateur</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Telephone</th>
+            <th>Profile</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="usersTable">
+            <!-- les users ici dynamiquement -->
+        </tbody>
+    </table>
+<!-- Modal -->
+
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Modifier utilisateur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <div id="editFormContent">
+                    <!-- Champ caché pour l'ID de l'utilisateur -->
+                    <input type="hidden" id="userId">
+
+                    <!-- Champ pour le nom d'utilisateur -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nom d'utilisateur :</label>
+                        <input type="text" class="form-control" id="username">
+                    </div>
+
+                    <!-- Champ pour l'email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email :</label>
+                        <input type="email" class="form-control" id="email">
+                    </div>
+
+                    <!-- Champ pour l'adresse -->
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Adresse :</label>
+                        <input type="text" class="form-control" id="address">
+                    </div>
+
+                    <!-- Champ pour le téléphone -->
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Téléphone :</label>
+                        <input type="text" class="form-control" id="phone">
+                    </div>
+
+                    <!-- Champ pour le nouveau mot de passe -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Nouveau mot de passe :</label>
+                        <input type="password" class="form-control" id="password" placeholder="Ne pas toucher si vous ne voulez pas changer">
+                    </div>
+
+                    <!-- Sélection du profil -->
+                    <div class="mb-3">
+                        <label for="profileSelect" class="form-label">Profil :</label>
+                        <select class="form-control" id="profileSelect" name="profile">
+                            <!-- Options de profil à ajouter ici -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="edit()">Modifier</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+

@@ -7,11 +7,9 @@
 {% block onload %} onload="getProfiles()" {% endblock %}
 
 {% block body %}
-
-
-<div class="text-center">
-    <h1>Profils</h1>
-</div>
+    <div class="text-center">
+        <h1>Profils</h1>
+    </div>
 
 
 
@@ -20,110 +18,105 @@
     type="text" id="searchOther" class="form-control search-box" placeholder="par nom  "> <br>
 <div class="d-flex justify-content-between">
     <a href="/users/index" class="btn btn-success"><span class="material-symbols-outlined">
-        arrow_back
+            arrow_back
         </span>Revenir aux utilsateurs</a>
     <a href="{{ path('app_profile_add_form') }}" class="btn btn-primary"> <span class="material-symbols-outlined">
-        add
-        </span>Ajouter profil</a> </div> <br>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nom</th>
-                <th scope="col">Actions</th>
-            </tr>
-        </thead>
-        <tbody id="profilesList">
-            <!-- Les profils seront ajoutés ici dynamiquement -->
-        </tbody>
-    </table>
+            add
+        </span>Ajouter profil</a>
+</div> <br>
+<table class="table display" id="example">
+    <thead>
+        <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody id="profilesList">
+        <!-- Les profils seront ajoutés ici dynamiquement -->
+    </tbody>
+</table>
 
 
-    <!-- Modal Bootstrap pour afficher les rôles -->
-    <div class="modal fade" id="rolesModal" tabindex="-1" aria-labelledby="rolesModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="rolesModalLabel">Rôles du Profil</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+<!-- Modal Bootstrap pour afficher les rôles -->
+<div class="modal fade" id="rolesModal" tabindex="-1" role="dialog" aria-labelledby="rolesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rolesModalLabel">Rôles du Profil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="rolesList">
+                    <!-- Les rôles seront ajoutés ici dynamiquement -->
                 </div>
-                <div class="modal-body">
-                    <ul id="rolesList">
-                        <!-- Les rôles seront ajoutés ici dynamiquement -->
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editProfileModalLabel">Modifier Profil</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="editProfileForm">
-                        <!-- Profile name input -->
-                        <input type="hidden" name="" id="profileId">
-                        <div class="form-group">
-                            <label for="editProfileName">Nom du profil :</label>
-                            <input type="text" class="form-control" id="editProfileName"
-                                placeholder="Enter profile name">
-                        </div>
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Modifier le Profil </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="editProfileForm">
+                    <!-- Profile name input -->
+                    <input type="hidden" name="" id="profileId">
+                    <div class="form-group">
+                        <label for="editProfileName">Nom du profil :</label>
+                        <input type="text" class="form-control" id="editProfileName" placeholder="Enter profile name">
+                    </div>
 
-                        <!-- Roles checkboxes -->
-                        <div class="form-group">
-                            <label>Roles:</label>
-                            <ul id="editRolesList" class="list-group">
+                    <!-- Roles checkboxes -->
+                    <div class="form-group">
+                        <label>Roles:</label>
+                        <div id="editRolesList" class="row">
 
-                            </ul>
-                        </div>
+                        </ul>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="button" class="btn btn-primary" id="saveChangesBtn" data-dismiss="modal"
-                        onclick="editProfile()">Modifier
-                        changes</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="saveChangesBtn" data-bs-dismiss="modal"
+                    onclick="editProfile()">Modifier</button>
             </div>
         </div>
     </div>
+</div>
+{% endblock %}
 
 
-
-    {% endblock %}
-
-
-    {% block jss %}
-    <script>
-         $(document).ready(function() {
-             $("#searchId").on("keyup", function() {
-                 var value = $(this).val().toLowerCase();
-                 $("#profilesList tr").filter(function() {
-                     $(this).toggle($(this).find("td:first").text().toLowerCase().indexOf(value) > -1)
-                 });
-             });
-         });
-
-         $(document).ready(function() {
-            $("#searchOther").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#profilesList tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
+{% block jss %}
+<script>
+    $(document).ready(function () {
+        $("#searchId").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#profilesList tr").filter(function () {
+                $(this).toggle($(this).find("td:first").text().toLowerCase().indexOf(value) > -1)
             });
         });
+    });
 
-     </script>
+    $(document).ready(function () {
+        $("#searchOther").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#profilesList tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+</script>
 {% endblock %}

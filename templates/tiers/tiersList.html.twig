@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tiers{% endblock %}
+
+{% block onload %} onload="getTiers()" {% endblock %}
+
+{% block body %}
+
+    <div class="text-center">
+        <h1>Tiers</h1>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <a href="{{ path('additional_info_fields_list') }}" class="btn btn-success">Gérer les types d'info additionnels pour tiers</a>
+        <a href="{{ path('app_tiers_type_list') }}">Gérer les types de tiers</a>
+        <button class="btn btn-warning" onclick="getTiers()">Actualiser</button>
+        <a href="add" class="btn btn-primary"> <span class="material-symbols-outlined">
+                add
+            </span>Nouveau tiers</a>
+    </div>
+    <br>
+    <table class="table display" id="example">
+        <thead>
+        <tr>
+            <th>Raison Sociale</th>
+            <th>Address</th>
+            <th>Telephone</th>
+            <th>Email</th>
+        <th>Type de tiers</th> 
+            <th>Actions</th>
+        </tr></thead>
+        <tbody id="tiersTable">
+        </tbody>
+    </table>
+
+   <!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Modifier Tiers</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="editFormContent">
+                    <!-- Hidden input for tiers ID -->
+                    <input type="hidden" id="tierId">
+
+                    <!-- Raison Sociale input -->
+                    <div class="mb-3">
+                        <label for="raisonSociale" class="form-label">Raison Sociale :</label>
+                        <input type="text" class="form-control" id="raisonSociale">
+                    </div>
+
+                    <!-- Address input -->
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Adresse :</label>
+                        <input type="text" class="form-control" id="address">
+                    </div>
+
+                    <!-- Phone input -->
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Téléphone :</label>
+                        <input type="text" class="form-control" id="phone">
+                    </div>
+
+                    <!-- Email input -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email :</label>
+                        <input type="email" class="form-control" id="email">
+                    </div>
+
+                    {# Type input #}
+                    <div class="form-group">
+            <label for="typeSelect">Type : </label>
+            <select id="typeSelect"></select>
+        </div>
+                    <div class="container mt-5">
+            <div class="text-center">
+                <h2>Info additionnels</h2>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-success" id="addRowBtn">+</button>
+                    <button type="button" class="btn btn-danger" id="removeRowBtn">-</button>
+                </div>
+            </div><br>
+            <div id="dynamicForm">
+                <!-- Rows will be dynamically added here -->
+            </div>
+        </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="editTier()">Modifier</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="additionalInfoModal" tabindex="-1" aria-labelledby="additionalInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="additionalInfoModalLabel">Informations Additionnelles</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Champ</th>
+              <th scope="col">Valeur</th>
+            </tr>
+          </thead>
+          <tbody id="additionalInfoTableBody">
+            <!-- Table rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

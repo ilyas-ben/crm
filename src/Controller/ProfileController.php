@@ -41,8 +41,6 @@ class ProfileController extends AbstractController
     #[Route('/index', name: 'app_profiles')]
     public function index(Request $request): Response
     {
-        /* if(!hasRole($users,"add")) */
-
         if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "profiles"))
 
             return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
@@ -60,16 +58,14 @@ class ProfileController extends AbstractController
         if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "profiles"))
 
             return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
-            
+
         return $this->json($this->profileService->getAll());
     }
 
     #[Route('/{id}/roles', methods: ['GET'])]
     public function getRolesByProfileId(int $id): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "roles"))
 
-            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
 
         return $this->json($this->profileService->getRolesByProfileId($id));
     }
@@ -110,8 +106,7 @@ class ProfileController extends AbstractController
     #[Route('/{id}', name: 'app_profile_edit', methods: ['PUT'])]
     public function edit(Request $request, int $id): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "showRoles", "profiles"))
-
+        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "edit", "profiles"))
             return new Response(Response::HTTP_FORBIDDEN);
 
         $profileJson = $request->getContent();

@@ -10,21 +10,33 @@
 
 {% block body %}
 
-    <a href="/profiles/index">Go back to profiles's list</a>
+  
+   
+        
+            <a href="/profiles/index" class="btn btn-success"><span class="material-symbols-outlined">
+        arrow_back
+        </span>Revenir aux profils</a>
+        
+        <div>
+            <div id="newProfile">
+                <h1 class="text-center">Ajouter un profil</h1>
+              
+                    <label for="profileName" class="form-label">Nom du Profile :</label>
+                    <input type="text" id="profileName" class="form-control" placeholder="Nom du profil">
+                
+                <div class="row" id="rolesList" class="list-group mb-3">
+                    <!-- Les éléments de la liste seront ajoutés ici -->
+                </ul>
+                <button class="btn btn-primary mt-3" id="addProfileBtn" onclick="addProfile()">Ajouter profil</button>
+            </div>
+        </div>
+    
 
-    <div id="newProfile">
 
-        <h1>Nom du profile</h1>
-        <input type="text" id="profileName" placeholder="Nom du profil">
-        <ul id="rolesList" class="list-group">
-
-        </ul>
-        <button class="btn btn-primary mt-3" id="addProfileBtn" onclick="addProfile()">Ajouter profil/button>
-    </div>
 
 {% endblock %}
 
-{% block js %}
+{% block jss %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const rolesList = document.getElementById('rolesList');

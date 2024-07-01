@@ -62,8 +62,8 @@ class UserController extends AbstractController
     }
 
 
-    #[Route('/byid/{id}',  methods: ['GET'])]
-    public function getById(int $id): JsonResponse
+    #[Route('/byid/{id}', methods: ['GET'])]
+    public function getById(int $id): Response
     {
         if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "edit", "users") && $id !== $this->userService->getCurrentUserId())
             return new Response(Response::HTTP_FORBIDDEN);
@@ -97,7 +97,11 @@ class UserController extends AbstractController
     public function deleteById($id): Response
     {
         if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "delete", "users"))
-            return new Response(Response::HTTP_FORBIDDEN);
+            return new Response("",Response::HTTP_FORBIDDEN);
+
+        if ($this->userService->getCurrentUserId() == $id)
+
+            return new Response("Impossible de supprimer votre compte alors que vous êtes connecté avec.", 403);
 
         $this->userService->deleteById($id);
         return new Response(200);

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter Tier Type{% endblock %}
+
+{% block body %}
+    <a href="/tiertypes/index" class="btn btn-success">
+        <span class="material-symbols-outlined">arrow_back</span> Revenir aux tier types
+    </a>
+
+    <div>
+        <div id="newTierType">
+            <h1 class="text-center">Ajouter un Tier Type</h1>
+            <label for="tierTypeName" class="form-label">Nom du Tier Type :</label>
+            <input type="text" id="tierTypeName" class="form-control" placeholder="Nom du tier type">
+            <button class="btn btn-primary mt-3" id="addTierTypeBtn" onclick="addTierType()">Ajouter Tier Type</button>
+        </div>
+    </div>
+{% endblock %}

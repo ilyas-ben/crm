@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Champs d'information supplémentaires{% endblock %}
+
+{% block onload %} onload="getAdditionalInfoFields()" {% endblock %}
+
+{% block body %}
+
+    <div class="text-center">
+        <h1>Champs d'information supplémentaires</h1>
+    </div>
+
+    <div class="d-flex justify-content-between">
+       <a href="/tiers/index" class="btn btn-success"><span class="material-symbols-outlined">
+            arrow_back
+        </span>Revenir aux tiers</a>
+        <button class="btn btn-warning" onclick="getAdditionalInfoFields()">Actualiser</button>
+        <a href="add" class="btn btn-primary">Ajouter un nouveau champ d'info additionnel</a>
+    </div>
+    <br>
+    <table class="table display" id="example">
+        <thead>
+        <tr>
+            <th>Nom du Champ</th>
+            <th>Type d'Entité</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="additionalInfoFieldsTable">
+        </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Modifier Champ d'information supplémentaire</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="editFormContent">
+                        <!-- Hidden input for additional info field ID -->
+                        <input type="hidden" id="fieldId">
+
+                        <!-- Field Name input -->
+                        <div class="mb-3">
+                            <label for="fieldName" class="form-label">Nom du Champ :</label>
+                            <input type="text" class="form-control" id="fieldName">
+                        </div>
+
+                        <!-- Entity Type input -->
+                        <div class="mb-3">
+                            <label for="entityType" class="form-label">Type d'Entité :</label>
+                            <input type="text" class="form-control" id="entityType">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="editAdditionalInfoField()">Modifier</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block jss %}
+    <script src="{{ asset('js/addInfo.js') }}"></script>
+{% endblock %}
+

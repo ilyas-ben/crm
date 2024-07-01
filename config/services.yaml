@@ -47,5 +47,17 @@ services:
         public: true  # Make the service accessible outside the container (optional)
         autowire: true  # Enable automatic dependency injection (optional)
         autoconfigure: true  # Allow the service to be configured automatically (optional)
+        
+
+    App\Service\TiersService:
+        class: App\Service\TiersService
+        arguments:
+            $tiersRepository: '@App\Repository\TiersRepository'
+            $serializer: '@serializer'  # Assuming you have the serializer service available
+
+        # Optionally, you can specify other settings like public, autowire, autoconfigure
+        public: true  # Make the service accessible outside the container (optional)
+        autowire: true  # Enable automatic dependency injection (optional)
+        autoconfigure: true  # Allow the service to be configured automatically (optional)
 
         

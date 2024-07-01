@@ -8,6 +8,7 @@ use App\Repository\RoleRepository;
 use App\Service\RoleService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Exception;
 use Symfony\Component\Serializer\SerializerInterface;
 
 
@@ -73,6 +74,9 @@ class ProfileService
 
     public function edit($id/* , Profile $newProfile = null */, string $newProfileJson = null): Profile
     {
+
+        $profileData = json_decode($newProfileJson, true);
+
         $oldProfile = new Profile();
         $oldProfile = $this->profileRepository->find($id);
 
@@ -82,14 +86,13 @@ class ProfileService
             throw new ('Profile not found');
         }
 
-        $profileData = json_decode($newProfileJson, true);
-
-        
+    
         $oldProfile->setName($profileData['name']);
         
         $oldProfile->setRoles(new ArrayCollection());
 
-        // Iterate through roles data and fetch or create Role entities /////
+        // Iterate through roles data and fetch or create Role entities
+        
         foreach ($profileData['roles'] as $roleData) {
             // Fetch Role entity from database by ID
             $role = $this->roleService->getById($roleData['id']);
