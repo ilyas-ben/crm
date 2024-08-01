@@ -14,8 +14,11 @@
             <input type="text" class="form-control" id="fieldName" required>
         </div>
         <div class="form-group">
-            <label for="entityType">Type d'Entité :</label>
-            <input type="text" class="form-control" id="entityType" required>
+            <label for="type">Type d'Entité :</label>
+            <select name="type" id="type">
+                <option value="1">Tiers</option>
+                <option value="2">Element de commande</option>
+            </select>
         </div>
     </div>
     <div class="form-group">
@@ -25,5 +28,5 @@
 {% endblock %}
 
 {% block jss %}
-    <script src="{{ asset('js/addInfo.js') }}"></script>
+<script src="{{ asset('js/addInfo.js') }}"></script>
 {% endblock %}

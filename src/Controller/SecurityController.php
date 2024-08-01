@@ -40,4 +40,10 @@ class SecurityController extends AbstractController
     {
         return $this->render('home.html.twig');
     }
+
+    #[Route(path:'/stockMenu', name:'app_stocks_manag_menu')]
+    public function stock_manag_menu(): Response
+    {
+        return $this->render('home_stock.html.twig');
+    }
 }

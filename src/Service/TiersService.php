@@ -36,6 +36,11 @@ class TiersService
         return $this->tiersRepository->find($id);
     }
 
+    public function getAllSuppliers(): array
+    {
+        return $this->tiersRepository->getAllSuppliers();
+    }
+
     public function save(Tiers $tiers = null, string $tiersJson = null): Tiers
     {
         if ($tiers != null) {
@@ -71,9 +76,6 @@ class TiersService
 
             return $this->tiersRepository->save($tiers);
         }
-
-
-
 
         throw new \InvalidArgumentException('Either $tiers or $tiersJson must be provided.');
     }

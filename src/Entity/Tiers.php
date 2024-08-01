@@ -37,9 +37,11 @@ class Tiers
     #[ORM\JoinColumn(nullable: false)]
     private ?TiersType $type = null;
 
+    
     public function __construct()
     {
         $this->additionalInfo = new ArrayCollection();
+        $this->bonCommandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,4 +158,5 @@ class Tiers
 
         return $this;
     }
+
 }

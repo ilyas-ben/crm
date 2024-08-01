@@ -1,5 +1,5 @@
 async function getAdditionalInfoFields() {
-    let addFields ;
+    let addFields;
     await fetch('/additional-info-fields')
         .then(response => {
             if (!response.ok) {
@@ -23,7 +23,7 @@ async function getAdditionalInfoFields() {
             fields.forEach(field => {
                 const rowHtml = '<tr>' +
                     '<td>' + field.fieldName + '</td>' +
-                    '<td>' + field.entityType + '</td>' +
+                    '<td>' + (field.type === 1 ? 'Tiers' : (field.type === 2 ? 'élement de bon de cmd ' : 'N/A')) + '</td>' +
                     '<td>' +
                     '<a href="#" onclick="editAdditionalInfoFieldForm(' + field.id + ')">Modifier</a> ' +
                     '<a href="#" onclick="deleteAdditionalInfoFieldById(' + field.id + ')">Supprimer</a>' +
@@ -33,26 +33,31 @@ async function getAdditionalInfoFields() {
                 table.innerHTML += rowHtml;
             });
 
+
             $('#example').DataTable().destroy();
             $('#example').DataTable();
             addFields = fields;
-            
+
         })
         .catch(error => {
             console.error('Error fetching additional info fields:', error);
         });
-        console.log(addFields);
-        return addFields;
+    console.log(addFields);
+    return addFields;
 }
 
 function addAdditionalInfoField() {
     const fieldName = document.getElementById('fieldName').value;
-    const entityType = document.getElementById('entityType').value;
+    const type = $('#type').val();
+
+    console.log(type);
 
     const field = {
         fieldName: fieldName,
-        entityType: parseInt(entityType)
+        type: parseInt(type)
     };
+
+    console.log(type);
 
     fetch('http://localhost:8000/additional-info-fields', {
         method: 'POST',
@@ -126,7 +131,7 @@ function deleteAdditionalInfoFieldById(fieldId) {
                             response.text().then(body => {
                                 showNotAllowed(body);
                             });
-                        }   
+                        }
                         Swal.fire({
                             title: "Impossible de supprimer le champ.",
                             text: "Une erreur inattendue de la part du serveur",
@@ -176,7 +181,7 @@ async function editAdditionalInfoFieldForm(id) {
             // Remplir les champs du formulaire avec les données du champ d'information supplémentaire
             document.getElementById('fieldId').value = field.id;
             document.getElementById('fieldName').value = field.fieldName;
-            document.getElementById('entityType').value = field.entityType;
+            $('type').val = field.type;
 
             // Afficher le modal d'édition
             var myModal = new bootstrap.Modal(document.getElementById('editModal'));
@@ -190,13 +195,13 @@ async function editAdditionalInfoFieldForm(id) {
 function editAdditionalInfoField() {
     var fieldId = document.getElementById('fieldId').value;
     var fieldName = document.getElementById('fieldName').value;
-    var entityType = document.getElementById('entityType').value;
+    var type = $("#type").val(); 
 
     // Construire l'objet champ d'information supplémentaire
     var field = {
         id: fieldId,
         fieldName: fieldName,
-        entityType: parseInt(entityType)
+        type: parseInt(type)
     };
 
     const url = 'http://localhost:8000/additional-info-fields/' + fieldId;

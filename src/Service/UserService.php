@@ -7,7 +7,9 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Exception;
+use JsonException;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -18,14 +20,16 @@ class UserService
     private UserPasswordHasherInterface $encoder;
     private ProfileService $profileService;
     private Security $security;
+    private KernelInterface $kernel;
 
-    public function __construct(UserRepository $userRepository, SerializerInterface $serializer, UserPasswordHasherInterface $encoder, ProfileService $profileService, Security $security)
+    public function __construct(UserRepository $userRepository, SerializerInterface $serializer, UserPasswordHasherInterface $encoder, ProfileService $profileService, Security $security , KernelInterface $kernel)
     {
         $this->userRepository = $userRepository;
         $this->serializer = $serializer;
         $this->encoder = $encoder;
         $this->profileService = $profileService;
         $this->security = $security;
+        $this->kernel = $kernel;
     }
 
     public function getAll(): array
@@ -52,7 +56,30 @@ class UserService
             return $this->userRepository->save($user);
 
         $user = new User();
-        $user = $this->serializer->deserialize($userJson, User::class, "json");
+        $userData = json_decode($userJson, true);
+        
+        
+        if (is_array($userData)) {
+            // Set each attribute if present in $userData
+            if (isset($userData['username'])) {
+                $user->setUsername($userData['username']);
+            }
+            if (isset($userData['password'])) {
+                $user->setPassword($userData['password']);
+            }
+            if (isset($userData['email'])) {
+                $user->setEmail($userData['email']);
+            }
+            if (isset($userData['address'])) {
+                $user->setAddress($userData['address']);
+            }
+            if (isset($userData['phone'])) {
+                $user->setPhone($userData['phone']);
+            }
+            if (isset($userData['image'])) {
+                $image64 = $userData['image'];
+            }
+        }
 
         //setting profile
         $profile = new Profile();
@@ -62,6 +89,22 @@ class UserService
         // setting password
         $hashedPassword = $this->encoder->hashPassword($user, $user->getPassword());
         $user->setPassword($hashedPassword);
+
+        // setting the image
+        if($image64){
+            $imageData = base64_decode($image64);
+            throw new Exception($imageData);
+            $newFilename = uniqid() . '.png';
+            $imagePath = $this->kernel->getProjectDir() . '/public/images/' . $newFilename;
+            try {
+                file_put_contents($imagePath, $imageData);
+            } catch (JsonException $e) {
+                throw new JsonException('Failed to upload image');
+            }
+
+            $user->setImage('images/'. $newFilename);
+        } 
+        else throw new Exception(implode("," , $image64));
 
         return $this->userRepository->save($user);
     }
@@ -126,6 +169,7 @@ class UserService
     {
         return $this->security->getUser()->getId();
     }
+    
 
 
 }

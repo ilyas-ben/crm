@@ -52,8 +52,8 @@ class AdditionalInfoFieldController extends AbstractController
     #[Route('/{id}', methods: ['PUT'])]
     public function edit(Request $request, $id): Response
     {
-        $clientJson = $request->getContent();
-        return $this->json($this->additionalInfoFieldService->edit($id, null, $clientJson), Response::HTTP_OK);
+        $newFieldJson = $request->getContent();
+        return $this->json($this->additionalInfoFieldService->edit($id, null, $newFieldJson), Response::HTTP_OK);
     }
 
     #[Route('/{id}', methods: ['DELETE'])]

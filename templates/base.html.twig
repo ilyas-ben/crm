@@ -25,6 +25,7 @@
 
 <body {%block onload %}{% endblock %}>
     <div class="container">
+    <div><a href="/">Home</a></div>
         {% if app.user %}<div class="text-right" id="loggedInUser"><p id="currentUsernale" style="margin-right : 1%; display: inline;">Connecté en tant que : {{app.user.username}}</p> <a href="/logout"
                 class="btn btn-danger">Déconnecter</a></div> {% endif %}
         {% block body %}{% endblock %}
@@ -43,6 +44,7 @@
 
     throw new Error();
 }
+
 </script>
 <!-- JavaScript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

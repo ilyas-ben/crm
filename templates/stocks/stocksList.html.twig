@@ -1,0 +1,188 @@
+{# stocksList.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{name}}{% endblock %}
+
+{% block onload %} onload="" {% endblock %}
+
+{% block body %}
+<div class="text-center">
+    <h1>{{name}} </h1>
+
+
+</div>
+
+
+
+
+<input type="text" id="searchId" class="form-control search-box" placeholder="Rechercher par ID"><br> ou <br>
+<input type="text" id="searchProductName" class="form-control search-box"
+    placeholder="Rechercher par nom de produit"><br>
+<ul class="list-group">
+    <li class="list-group-item">
+        <a href="#" class="btn btn-secondary" onclick="displaySMModal({{id}})">Mouvements de l'entrepôt</a>
+    </li>
+    <li class="list-group-item">
+        <a href="{{ path('app_warehouse_receptions', {'id': id}) }}" class="btn btn-secondary">Réceptions de
+            l'entrepôt</a>
+    </li>
+    <li class="list-group-item">
+        <a href="#" class="btn btn-secondary"  onclick="transfertStockForm()">
+            Effectuer un transfert de stock
+        </a>
+    </li>
+</ul>
+
+<div class="d-flex justify-content-between">
+    <a href="{{ path('app_warehouses') }}" class="btn btn-success">
+        <span class="material-symbols-outlined">
+            arrow_back
+        </span>Revenir aux stocks
+    </a>
+
+    <a href="#" onclick="displayStocks(await getStocks())" class="btn btn-warning">Actualiser</a>
+
+    <a href="{{ path('app_stock_add_form') }}" class="btn btn-primary">
+        <span class="material-symbols-outlined">
+            add
+        </span>Ajouter stock
+    </a>
+</div>
+<br>
+<table class="table display" id="stockTable">
+    <thead>
+        <tr>
+            <th scope="col">Produit</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody id="stockList">
+        <!-- Les stocks seront ajoutés ici dynamiquement -->
+    </tbody>
+</table>
+
+<!-- Modal Bootstrap pour modifier un stock -->
+<div class="modal fade" id="editStockModal" tabindex="-1" aria-labelledby="editStockModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editStockModalLabel">Modifier le Stock</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="editStockForm">
+                    <input type="hidden" id="editStockId">
+                    <div class="form-group">
+                        <label for="editStockProduct">Produit :</label>
+                        <select class="form-control" id="editStockProduct">
+                            <!-- Options de produits seront ajoutées dynamiquement ici -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editStockWareHouse">Entrepôt :</label>
+                        <select class="form-control" id="editStockWareHouse">
+                            <!-- Options d'entrepôts seront ajoutées dynamiquement ici -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editStockQuantity">Quantité :</label>
+                        <input type="number" class="form-control" id="editStockQuantity"
+                            placeholder="Entrer la quantité">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="modifyStockBtn" data-bs-dismiss="modal"
+                    onclick="updateStock()">Modifier</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Modal poour transferer #}
+<div class="modal fade" id="transferStockModal" tabindex="-1" aria-labelledby="transferStockModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transferStockModalLabel">Transférer le stock</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="transfertForm">
+
+                <div class="mb-3">
+                    <label for="quantityInput" class="form-label">Quantité</label>
+                    <input type="number" class="form-control" id="quantityToTransfer" min="0">
+                </div>
+                <div class="mb-3">
+                    <label for="warehouseDestination" class="form-label">Entrepôt de destination</label>
+                    <select class="form-select" id="warehouseDestination">
+                        <!-- Options will be dynamically filled by JS function -->
+                    </select>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" id="transferButton" data-bs-dismiss="modal"
+                    onclick="transfertStock()">Transférer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for stockmovements -->
+<div class="modal fade" id="stockMovementsModal" tabindex="-1" aria-labelledby="stockMovementsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="stockMovementsModalLabel">Mouvements de stock</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="stockMovementsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Quantité</th>
+                            <th>Produit</th>
+                            <th>Origine</th>
+                            <th>Destination</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stockMovementsData">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jss %}
+{{ parent() }}
+<script src="{{ asset('js/stock.js') }}"></script>
+<script src="{{ asset('js/product.js') }}"></script>
+<script src="{{ asset('js/warehouse.js') }}"></script>
+
+<script>
+    let stocks;
+    document.addEventListener('DOMContentLoaded', async function () {
+        // Code to run when the DOM content is fully loaded
+        const warehouseId = {{ id }} ;
+    stocks = await getStocksByWarehouseId(warehouseId);
+    displayStocks(stocks);
+    });
+
+</script>
+{% endblock %}

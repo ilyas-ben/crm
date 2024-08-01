@@ -6,16 +6,22 @@
 
 
 {% block body %}
-<h1>Welcome, {{app.user.username}} ! </h1>
+<h1>Bienvenue, {{app.user.username}} ! </h1>
 
-    <div class="text-center">
-        <div >
-            <a href="/users/index" class="btn btn-primary btn-lg">Gérer les utilisateurs</a>
-        </div>
-        <div >
-            <a href="/tiers/index" class="btn btn-primary btn-lg">Gérer les tiers</a>
-        </div>
+<div class="text-center">
+    <div>
+        <a href="/users/index" class="btn btn-primary btn-lg">Gérer les utilisateurs</a>
     </div>
+    <div>
+        <a href="/tiers/index" class="btn btn-primary btn-lg">Gérer les tiers</a>
+    </div>
+    <div>
+        <a href="{{ path('app_stocks_manag_menu') }}" class="btn btn-primary btn-lg">
+            Gestion des Stocks
+        </a>
+
+    </div>
+</div>
 
 
 

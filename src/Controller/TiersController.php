@@ -28,8 +28,8 @@ class TiersController extends AbstractController
     #[Route('/index', name: 'tiers_list_page', methods: ['GET'])]
     public function index(): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "tiers"))
-            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
+        /* if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "tiers"))
+            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN); */
 
         return $this->render('tiers/tiersList.html.twig');
     }
@@ -38,9 +38,9 @@ class TiersController extends AbstractController
     #[Route('', name: "app_tiers_getall", methods: ['GET'])]
     public function getAll(): Response
     {
-       /*  if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "tiers"))
+        /*  if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "tiers"))
 
-            return new Response('', Response::HTTP_FORBIDDEN); */
+             return new Response('', Response::HTTP_FORBIDDEN); */
         return $this->json($this->tiersService->getAll());
     }
 
@@ -56,10 +56,10 @@ class TiersController extends AbstractController
     #[Route('/add', name: 'tiers_add_page', methods: ['GET'])]
     public function addTiers(Request $request): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "add", "tiers"))
+       /*  if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "add", "tiers"))
 
             return new Response("<script>alert(\"Vous n'êtes pas autorisé pour cette action!\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
-
+ */
         return $this->render('tiers/addForm.html.twig');
     }
 
@@ -101,7 +101,10 @@ class TiersController extends AbstractController
         return $this->json($additionalInfo);
     }
 
-
-
-
+    #[Route('/suppliers', name: 'get_suppliers', methods: ['GET'])]
+    public function getSuppliers(): Response
+    {
+        $suppliers = $this->tiersService->getAllSuppliers();
+        return $this->json($suppliers);
+    }
 }

@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégories{% endblock %}
+
+{% block onload %} onload="displayCategories()" {% endblock %}
+
+{% block body %}
+    <div class="text-center">
+        <h1>Catégories</h1>
+    </div>
+
+    <input type="text" id="searchId" class="form-control search-box" placeholder="Rechercher par id"><br> ou <br>
+    <input type="text" id="searchName" class="form-control search-box" placeholder="Rechercher par nom "><br>
+    <div class="d-flex justify-content-between">
+        <a href="{{ path('app_products') }}" class="btn btn-primary">
+    <span class="material-icons-outlined">
+        arrow_back
+    </span>
+    Revenir aux produits
+</a>
+
+<a href="#" onclick="displayCategories()" class="btn btn-warning"  >Rafraichir</a>
+
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+    <span class="material-symbols-outlined">
+        add
+    </span>
+    Ajouter catégorie
+</a>
+
+    </div>
+    <br>
+    <table class="table display" id="example">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="categoryList">
+            <!-- Les catégories seront ajoutées ici dynamiquement -->
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addCategoryModalLabel">Ajouter une catégorie</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="categoryForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Nom de la catégorie</label>
+            <input type="text" class="form-control" id="name" placeholder="Entrez le nom de la catégorie">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addCategory()">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- Modal Bootstrap pour modifier la catégorie -->
+    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCategoryModalLabel">Modifier la Catégorie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="editCategoryForm">
+                        <!-- Category name input -->
+                        <input type="hidden" id="editCategoryId">
+                        <div class="form-group">
+                            <label for="editCategoryName">Nom de la catégorie :</label>
+                            <input type="text" class="form-control" id="editCategoryName"
+                                placeholder="Entrer le nom de la catégorie">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" id="modifyCategoryBtn" data-bs-dismiss="modal"
+                        onclick="updateCategory()">Modifier</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block jss %}
+ >
+            {{ parent() }}
+    <script src="{{ asset('js/category.js') }}"></script>
+ 
+{% endblock %}

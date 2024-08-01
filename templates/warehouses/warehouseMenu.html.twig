@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Entrepôts{% endblock %}
+
+{% block onload %} onload="displayWarehouses()" {% endblock %}
+
+{% block body %}
+<a href="{{ path('app_warehouses') }}" class="btn btn-success">
+        <span class="material-symbols-outlined">
+            arrow_back
+        </span>Revenir à la page des entrepôts
+    </a>
+<div class="text-center"><h1>{{warehouse.label}}</h1></div>
+<div class="text-center">
+Sélectionner l'option de votre choix : <br>
+<div><a href="#" class="btn btn-primary">Réceptions</a></div><br><div><a href="#" class="btn btn-primary">Transferts</a></div>
+</div>
+{% endblock %}
+
+{% block jss %}
+    {{ parent() }}
+    <script src="{{ asset('js/warehouse.js') }}"></script>
+{% endblock %}

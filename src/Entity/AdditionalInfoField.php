@@ -18,6 +18,9 @@ class AdditionalInfoField
     #[ORM\Column(length: 255)]
     private ?string $fieldName = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $type = null; // 1: for tiers, 2: for DetailsBonCommande
+
    
     public function __construct()
     {
@@ -37,6 +40,18 @@ class AdditionalInfoField
     public function setFieldName(string $fieldName): static
     {
         $this->fieldName = $fieldName;
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(?int $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

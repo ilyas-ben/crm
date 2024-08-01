@@ -1,0 +1,202 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réceptions de l'entrepôt{% endblock %}
+
+{% block onload %} onload=" " {% endblock %}
+
+{% block body %}
+<div class="text-center">
+    <h1>Réceptions de l'entrepôt :</h1>
+    <p class="wareHouseName"></p>
+</div>
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <a href="#" class="btn btn-secondary" onclick="displayIncomingSMInModal({{id}})">Stocks entrants non reçus</a>
+    </li>
+</ul>
+
+<div class="d-flex justify-content-between">
+    <a href="stocks" class="btn btn-success">
+        <span class="material-symbols-outlined">
+            arrow_back
+        </span>Revenir aux stocks
+    </a>
+    <a href="#" class="btn btn-primary" onclick="showAddRFormModal({{id}})">
+        <span class="material-symbols-outlined">
+            add
+        </span>Ajouter une réception
+    </a>
+</div>
+<br>
+<table class="table display" id="example">
+    <thead>
+        <tr>
+            <th scope="col">Produit</th>
+            <th scope="col">Date</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Entrepôt source</th>
+            <th scope="col">Nature</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody id="receptionList">
+        <!-- Les réceptions seront ajoutées ici dynamiquement -->
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="addReceptionModal" tabindex="-1" aria-labelledby="addReceptionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addReceptionModalLabel">Mouvement de stock entrant</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="stockMovementSelect" class="form-label">Sélectionner un mouvement de stock</label>
+          <select class="form-select" id="stockMovementSelect">
+            <!-- Options will be dynamically filled using JavaScript -->
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="quantityReceived" class="form-label">Quantité reçue</label>
+          <input type="number" class="form-control" id="quantityReceived" placeholder="Quantité reçue">
+        </div>
+      </div> 
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addReception({{id}})">Ajouter</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="incomingStockMovementsModal" tabindex="-1" aria-labelledby="incomingStockMovementsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="incomingStockMovementsModalLabel">Mouvements entrants non encore achevés</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Produit</th>
+              <th scope="col">Quantité</th>
+              <th scope="col">Date et heure</th>
+              <th scope="col">Entrepôt émetteur</th>
+              <th scope="col">Quantité non reçue</th>
+              <th scope="col">Achevé</th>
+            </tr>
+          </thead>
+          <tbody id="incomingStockMovements">
+            <!-- Table rows will be dynamically filled using JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="stockMovementModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mouvement de stock associé :</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Produit : <span id="productName"></span></p>
+                <p>Quantité : <span id="quantity"></span></p>
+                <p>Entrepot émetteur : <span id="originLabel"></span></p>
+                <p>Date d'émission : <span id="date"></span></p>
+                <p>Achevé : <span id="isFinished"></span></p>
+                <p>Stock restant à recevoir  : <span id="remainingNotArrivedStock"></span></p>
+                <p>Reception Bon Commande : <span id="receptionBonCommande"></span> </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal Bootstrap pour modifier la réception -->
+<div class="modal fade" id="editReceptionModal" tabindex="-1" aria-labelledby="editReceptionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editReceptionModalLabel">Modifier la Réception</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="editReceptionForm">
+                    <!-- Form fields for editing reception -->
+                    <input type="hidden" id="editReceptionId">
+                    <div class="form-group">
+                        <label for="editReceptionProduct">Produit :</label>
+                        <select class="form-select" id="editReceptionProduct">
+                            <!-- Options seront ajoutées dynamiquement -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editReceptionDate">Date :</label>
+                        <input type="datetime-local" class="form-control" id="editReceptionDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="editReceptionQuantity">Quantité :</label>
+                        <input type="number" class="form-control" id="editReceptionQuantity">
+                    </div>
+                    <div class="form-group">
+                        <label for="editReceptionDestination">Entrepôt de destination :</label>
+                        <select class="form-select" id="editReceptionDestination">
+                            <!-- Options seront ajoutées dynamiquement -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editReceptionOrigin">Entrepôt d'origine :</label>
+                        <select class="form-select" id="editReceptionOrigin">
+                            <!-- Options seront ajoutées dynamiquement -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="modifyReceptionBtn" data-bs-dismiss="modal"
+                    onclick="updateReception()">Modifier</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jss %}
+{{ parent() }}
+<script src="{{ asset('js/warehouse.js') }}"></script>
+<script src="{{ asset('js/stockMovement.js') }}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function () {
+        const warehouses = await getReceptionsByWarehouseId({{ id }});
+        displayReceptions(warehouses);
+        });
+
+</script>
+
+{% endblock %}

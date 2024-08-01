@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<div class="text-center">
+    <h1>Gestion de stock</h1>
+</div>
+<div class="text-center mt-5">
+
+</div>
+<div class="container">
+    <div> <a href="  {{ path('app_products') }}" class="btn btn-primary btn-lg">
+            Gérer les Produits
+        </a></div><br>
+    <div><a href="{{ path('app_warehouses') }}" class="btn btn-primary btn-lg">
+            Gérer les Entrepôts
+        </a></div><br>
+    <div><a href="{{ path("app_bon_commande") }}" class="btn btn-primary btn-lg">
+            Gérer les Bons de Commande
+        </a></div><br>
+    <div><a href="{{ path('app_stocks') }}" class="btn btn-primary btn-lg">
+            Gérer les stocks
+        </a></div><br>
+</div>
+{% endblock %}

@@ -673,3 +673,6 @@ async function getAllTiersTypesInSelect(actualType=null) {
     return 1;
 }
 
+
+
+

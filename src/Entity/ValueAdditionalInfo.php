@@ -16,12 +16,17 @@ class ValueAdditionalInfo
     #[ORM\Column(length: 255)]
     private ?string $value = null;
 
-    #[ORM\ManyToOne(cascade:['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?AdditionalInfoField $additionalInfoField = null;
 
     #[ORM\ManyToOne(inversedBy: 'additionalInfo')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Tiers $tiers = null;
+
+    #[ORM\ManyToOne(inversedBy: 'additionalInfos')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?DetailsBonCommande $orderItem = null;
 
     public function getId(): ?int
     {
@@ -65,14 +70,27 @@ class ValueAdditionalInfo
     }
 
     public function __toString(): string
-{
-    return sprintf(
-        'ValueAdditionalInfo: [ID: %d, Value: %s, AdditionalInfoField: %s, Tiers ID: %d]',
-        $this->id,
-        $this->value,
-        $this->additionalInfoField ? $this->additionalInfoField->getId() : 'null',
-        $this->tiers ? $this->tiers->getId() : 'null'
-    );
-}
+    {
+        return sprintf(
+            'ValueAdditionalInfo: [ID: %d, Value: %s, AdditionalInfoField: %s, Tiers ID: %d]',
+            $this->id,
+            $this->value,
+            $this->additionalInfoField ? $this->additionalInfoField->getId() : 'null',
+            $this->tiers ? $this->tiers->getId() : 'null'
+        );
+    }
+
+    public function getOrderItem(): int
+    {
+        return $this->orderItem ? $this->orderItem->getId() : 0;
+    }
+
+
+    public function setOrderItem(?DetailsBonCommande $orderItem): static
+    {
+        $this->orderItem = $orderItem;
+
+        return $this;
+    }
 
 }

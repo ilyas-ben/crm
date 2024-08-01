@@ -70,10 +70,9 @@ class AdditionalInfoFieldService
     
         // Update AdditionalInfoField's infos
         $oldField->setFieldName($newField->getFieldName());
+        $oldField->setType($newField->getType());
     
         $this->additionalInfoFieldRepository->save($oldField);
     }
-    
-
     
 }

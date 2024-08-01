@@ -1,0 +1,195 @@
+{# productsList.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Produits{% endblock %}
+
+{% block onload %} onload="displayProducts()" {% endblock %}
+
+{% block body %}
+<div class="text-center">
+    <h1>Produits</h1>
+</div>
+
+<input type="text" id="searchId" class="form-control search-box" placeholder="Rechercher par ID"><br> ou <br>
+<input type="text" id="searchName" class="form-control search-box" placeholder="Rechercher par nom "><br>
+<div class="d-flex justify-content-between">
+    <a href="{{ path('app_stocks_manag_menu') }}" class="btn btn-success">
+        <span class="material-symbols-outlined">
+            arrow_back
+        </span>Revenir à la page d'accueil
+    </a>
+    <a href="{{ path('app_categories') }}" class="btn btn-primary">
+        <span class="material-symbols-outlined">
+            add
+        </span>
+        Categories de produit
+    </a>
+    <a href="#" class="btn btn-warning" onclick="displayProducts()">
+        <span class="material-symbols-outlined">
+            add
+        </span>
+        Actualiser
+    </a>
+
+    <!-- Button to trigger the modal -->
+    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal"
+        data-google="Ajouter un produit" onclick="fillInSelect()">
+        Ajouter un produit
+    </a>
+
+    <!-- Modal to add product -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Ajouter un produit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Prix</label>
+                            <input type="number" class="form-control" id="price" name="price" step="0.01">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categorie" class="form-label">Catégorie</label>
+                            <select class="form-select" id="categorie" name="categorie" required>
+                                <!-- Options will be dynamically filled by JavaScript -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="addProduct()">Ajouter le produit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade" id="unitModal" tabindex="-1" aria-labelledby="unitModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="unitModalLabel">Modifier l'unité de vente </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="unitId">
+        <div class="mb-3">
+          <label for="conversionRate" class="form-label">Taux de conversion</label>
+          <input type="number" class="form-control" id="conversionRate" step="0.01">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick=" editUnit()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<br>
+<table class="table display" id="example">
+    <thead>
+        <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Prix</th>
+            <th scope="col">Description</th>
+            <th scope="col">Catégorie</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody id="productList">
+        <!-- Les produits seront ajoutés ici dynamiquement -->
+    </tbody>
+</table>
+
+<!-- Modal Bootstrap pour modifier un produit -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Modifier le Produit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="editProductForm">
+                    <!-- Champ de saisie pour le nom du produit -->
+                    <input type="hidden" id="editProductId">
+                    <div class="form-group">
+                        <label for="editProductName">Nom du produit :</label>
+                        <input type="text" class="form-control" id="editProductName"
+                            placeholder="Entrer le nom du produit">
+                    </div>
+
+                    <!-- Champ de saisie pour le prix -->
+                    <div class="form-group">
+                        <label for="editProductPrice">Prix :</label>
+                        <input type="number" class="form-control" id="editProductPrice"
+                            placeholder="Entrer le prix du produit">
+                    </div>
+
+                    <!-- Champ de saisie pour la description -->
+                    <div class="form-group">
+                        <label for="editProductDescription">Description :</label>
+                        <input type="text" class="form-control" id="editProductDescription"
+                            placeholder="Entrer la description du produit">
+                    </div>
+
+                    <!-- Champ de sélection pour la catégorie -->
+                    <div class="form-group">
+                        <label for="editProductCategory">Catégorie :</label>
+                        <select class="form-control" id="editProductCategory">
+                            <!-- Options de catégories seront ajoutées dynamiquement ici -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="modifyProductBtn" data-bs-dismiss="modal"
+                    onclick="updateProduct()">Modifier</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jss %}
+{{ parent() }}
+<script src="{{ asset('js/product.js') }}"></script>
+<script src="{{ asset('js/category.js') }}"></script>
+<script>
+    // Function to fill the select dropdown with categories
+    async function fillInSelect() {
+        // Assume getCategories() function is defined and returns a Promise
+        await getCategories().then(categories => {
+            const select = document.getElementById('categorie');
+            select.innerHTML = ''; // Clear existing options
+
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                select.appendChild(option);
+            });
+        }).catch(error => {
+            console.error('Error fetching categories:', error);
+        });
+    } </script>
+{% endblock %}

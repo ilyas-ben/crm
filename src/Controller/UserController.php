@@ -43,8 +43,8 @@ class UserController extends AbstractController
     #[Route('/index', name: 'users_list', methods: ['GET'])]
     public function index(): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "users"))
-            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
+        /* if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "users"))
+            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN); */
 
         return $this->render('users/usersList.html.twig');
     }
@@ -55,9 +55,10 @@ class UserController extends AbstractController
     #[Route('', methods: ['GET'])]
     public function getAll(): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "users"))
+        /* if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "users"))
 
-            return new Response(Response::HTTP_FORBIDDEN);
+            return new Response(Response::HTTP_FORBIDDEN); */
+            
         return $this->json($this->userService->getAll());
     }
 
@@ -97,7 +98,7 @@ class UserController extends AbstractController
     public function deleteById($id): Response
     {
         if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "delete", "users"))
-            return new Response("",Response::HTTP_FORBIDDEN);
+            return new Response("", Response::HTTP_FORBIDDEN);
 
         if ($this->userService->getCurrentUserId() == $id)
 
@@ -106,5 +107,9 @@ class UserController extends AbstractController
         $this->userService->deleteById($id);
         return new Response(200);
     }
+
+
+    
+
 
 }

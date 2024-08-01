@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Stock{% endblock %}
+
+{% block body %}
+    <div class="text-center">
+        <h1>Ajouter un Stock</h1>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <a href="{{ path('app_stocks') }}" class="btn btn-primary">
+            <span class="material-icons-outlined">arrow_back</span>
+            Revenir aux stocks
+        </a>
+    </div>
+    <br>
+
+    <div class="container">
+        <form id="addStockForm">
+            <div class="mb-3">
+                <label for="product" class="form-label">Produit</label>
+                <select class="form-select" id="product" required>
+                    <option value="">Sélectionner un produit</option>
+                    <!-- Options will be filled dynamically -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="warehouse" class="form-label">Entrepôt</label>
+                <select class="form-select" id="warehouse" required>
+                    <option value="">Sélectionner un entrepôt</option>
+                    <!-- Options will be filled dynamically -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantité</label>
+                <input type="number" class="form-control" id="quantity" min="0" required>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addStock()">Ajouter le Stock</button>
+        </form>
+    </div>
+
+    
+{% endblock %}
+
+{% block jss %}
+    {{ parent() }}
+    <script src="{{ asset('js/stock.js') }}"></script>
+    <script src="{{ asset('js/products.js') }}"></script>
+{% endblock %}

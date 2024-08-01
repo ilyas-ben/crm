@@ -43,6 +43,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne]
     private ?Profile $profile = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $image = null;
+
     
 
     public function getId(): ?int
@@ -160,5 +163,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->getAddress(),
             $this->getPhone()
         );
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }

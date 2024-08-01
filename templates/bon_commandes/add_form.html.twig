@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter bon de commande{% endblock %}
+
+{% block body %}
+<h1>Ajouter un bon de commande</h1>
+
+<div>
+    <a href="{{ path('app_bon_commande') }}" class="btn btn-success">
+            <span class="material-symbols-outlined">
+                arrow_back
+            </span>Revenir au menu précedent
+        </a>
+    <div class="mb-3">
+        <label for="supplier" class="form-label">Fournisseur :</label>
+        <select class="form-select" id="supplier" name="supplier" required>
+
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="orderDate" class="form-label">Date de commande :</label>
+        <input type="datetime-local" class="form-control" id="orderDate" name="orderDate" required>
+    </div>
+    <div class="mb-3">
+        <label for="notes" class="form-label">Note ou descriptif supplémentaire</label>
+        <textarea class="form-control" id="notes" name="notes" required></textarea>
+    </div>
+
+    <div class="container mt-5">
+        <div class="text-center">
+            <h2>Elements de la commande</h2>
+            <div class="col-auto">
+                <button type="button" class="btn btn-success" id="addRowBtn">+</button>
+            </div>
+        </div><br>
+        <div id="dynamicForm">
+            <!-- Rows will be dynamically added here -->
+        </div>
+    </div>
+
+    <div class="text-center"><a href="#" class="btn btn-primary" onclick="addBonCommande()">Soumettre la nouvelle
+            commande</a></div>
+</div>
+{% endblock %}
+
+
+{% block jss %}
+<script src="{{ asset('js/product.js') }}"></script>
+<script>
+    let products;
+    let count = 1;
+    async function addRow() {
+        var newRow = `
+                <div class="form-row mb-3 addInfos">
+                <input type="checkbox" name="" id="" class="consider" checked>
+                    Element :  `+ count + `
+                    <div class="col">
+                        Designation : <input type="text" placeholder="designation" class="designation">
+                    </div>
+                    <div class="col">
+                        Produit : <select name="" id="" class="productId" ><option value="0" >Selectionner un produit</option>
+                    </div>
+                    <div class="col">
+                        Quantité :<input type="text" placeholder="quantité" class="quantity">
+                    </div>
+                </div>
+            `;
+
+        await $('#dynamicForm').append(newRow);
+
+        console.log(products);
+
+        $('.productId:last').empty().append(
+            products.map(product =>
+                $('<option>', {
+                    id: product.id,
+                    value: product.id,
+                    text: product.name
+                })
+            )
+        );
+    }
+    $('#addRowBtn').on('click', function () {
+        addRow();
+        count++;
+    });
+
+
+    document.addEventListener('DOMContentLoaded', async function () {
+        // Your code here
+        products = await getProducts();
+        const response = await fetch('http://localhost:8000/tiers/suppliers');
+        if (!response.ok) {
+            throw new Error('Erreur de la part du serveur');
+        }
+        const suppliers = await response.json();
+        const selectElement = document.getElementById('supplier');
+
+        suppliers.forEach(supplier => {
+            const option = document.createElement('option');
+            option.id = supplier.id;
+            option.value = supplier.id;
+            option.textContent = supplier.raisonSociale;
+            selectElement.appendChild(option);
+        });
+
+    });
+
+
+</script>
+<script src="{{ asset('js/bonCommande.js') }}"></script>
+
+{% endblock %}

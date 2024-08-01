@@ -41,10 +41,10 @@ class ProfileController extends AbstractController
     #[Route('/index', name: 'app_profiles')]
     public function index(Request $request): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "profiles"))
+        /* if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "profiles"))
 
             return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
-
+ */
 
         return $this->render('profiles/profiles.html.twig', [
             'controller_name' => 'ProfileController',
@@ -55,9 +55,9 @@ class ProfileController extends AbstractController
     #[Route('', methods: ['GET'])]
     public function getAll(): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "profiles"))
+        /* if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "profiles"))
 
-            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
+            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN); */
 
         return $this->json($this->profileService->getAll());
     }
@@ -65,17 +65,15 @@ class ProfileController extends AbstractController
     #[Route('/{id}/roles', methods: ['GET'])]
     public function getRolesByProfileId(int $id): Response
     {
-
-
         return $this->json($this->profileService->getRolesByProfileId($id));
     }
 
     #[Route('/add', name: 'app_profile_add_form', methods: ['GET'])]
     public function addForm(): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "add", "profiles"))
+        /* if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "add", "profiles"))
 
-            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
+            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN); */
         return $this->render('profiles/addForm.html.twig');
     }
 
@@ -84,10 +82,10 @@ class ProfileController extends AbstractController
     public function add(Request $request): Response
     {
 
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "add", "profiles"))
+        /* if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "add", "profiles"))
 
             return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
-
+ */
         $profileJson = $request->getContent();
         return $this->json($this->profileService->save(null, $profileJson));
     }
@@ -97,17 +95,17 @@ class ProfileController extends AbstractController
 
     public function getById(int $id): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "profiles"))
+        /* if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "show", "profiles"))
 
-            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN);
+            return new Response("<script>alert(\"You dont have the rights ! , please go back\");location.href=\" / \"</script>", Response::HTTP_FORBIDDEN); */
         return $this->json($this->profileService->getById($id));
     }
 
     #[Route('/{id}', name: 'app_profile_edit', methods: ['PUT'])]
     public function edit(Request $request, int $id): Response
     {
-        if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "edit", "profiles"))
-            return new Response(Response::HTTP_FORBIDDEN);
+        /* if (!$this->userService->userHasRoleByUserId($this->userService->getCurrentUserId(), "edit", "profiles"))
+            return new Response(Response::HTTP_FORBIDDEN); */
 
         $profileJson = $request->getContent();
         return $this->json($this->profileService->edit($id, $profileJson));
