@@ -40,7 +40,6 @@ class ProductService
         // Set category after getting it by ID from service
         $category = $this->categoryService->getById($productData['category']['id']);
         $product->setCategory($category);
-
         $unit = new Unit();
         $unit->setProduct($this->productRepository->save($product));
         $this->unitRepoUnitRepository->save($unit);
